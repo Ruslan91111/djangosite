@@ -6,7 +6,7 @@ from datetime import datetime
 
 
 
-def home(request, year, month):
+def home(request, year=datetime.now().year, month=datetime.now().strftime('%B')):
     name = "Ruslan"
     month = month.title()
     # Convert month from name to number
@@ -21,7 +21,7 @@ def home(request, year, month):
     # get current time
     time = now.strftime('%H:%M')
 
-    return render(request, 'home.html',
+    return render(request, 'events/home.html',
                   {"name": name, "year": year,
                    "month": month, "month_number": month_number,
                    "cal": cal,
