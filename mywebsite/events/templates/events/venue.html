@@ -7,8 +7,11 @@
     <table class="table table-bordered table-hover">
       {% for venue in venue_list %}  
           <tr>
-              <td><a href="{% url 'show-venue' venue.id %}"> {{ venue }} </a>
-
+              <td><a href="{% url 'show-venue' venue.id %}"> {{ venue }} </a></td>
+              <td align="right"><a href="{% url 'update-venue' venue.id %}" class="btn btn-outline-secondary btn-sm"> Update </a></td>
+          </tr>
       {% endfor %}
-
+    </table>
 {% endblock %}
+
+
