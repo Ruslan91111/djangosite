@@ -7,6 +7,18 @@ from .forms import VenueForm, EventForm
 from django.http import HttpResponseRedirect
 
 
+def delete_event(request, event_id):
+    event = Event.objects.get(pk=event_id)
+    event.delete()
+    return redirect('list-events')
+
+
+def delete_venue(request, venue_id):
+    venue = Venue.objects.get(pk=venue_id)
+    venue.delete()
+    return redirect('list-venues')
+
+
 def add_event(request):
     submitted = False
     if request.method == "POST":
@@ -21,6 +33,16 @@ def add_event(request):
     return render(request, 'events/add_event.html', {"form": form, 'submitted': submitted})
 
 
+def update_event(request, event_id):
+    event = Event.objects.get(pk=event_id)
+    form = EventForm(request.POST or None, instance=event)
+    if form.is_valid():
+        form.save()
+        return redirect('list-events')
+
+    return render(request, 'events/update_event.html', {'event': event, 'form': form})
+
+
 def update_venue(request, venue_id):
     venue = Venue.objects.get(pk=venue_id)
     form = VenueForm(request.POST or None, instance=venue)
@@ -29,7 +51,6 @@ def update_venue(request, venue_id):
         return redirect('list-venues')
 
     return render(request, 'events/update_venue.html', {'venue': venue, 'form': form, })
-
 
 
 def search_venues(request):
@@ -41,16 +62,13 @@ def search_venues(request):
         return render(request, 'events/search_venues.html', {})
 
 
-
 def show_venue(request, venue_id):
     venue = Venue.objects.get(pk=venue_id)
     return render(request, 'events/show_venue.html', {'venue': venue})
 
 
-
-
 def list_venues(request):
-    venue_list = Venue.objects.all()
+    venue_list = Venue.objects.all().order_by('name')
     return render(request, 'events/venue.html', {'venue_list': venue_list})
 
 
@@ -70,7 +88,7 @@ def add_venue(request):
 
 
 def all_events(request):
-    event_list = Event.objects.all()
+    event_list = Event.objects.all().order_by('event_date', 'name')
     return render(request, 'events/event_list.html', {'event_list': event_list})
 
 
