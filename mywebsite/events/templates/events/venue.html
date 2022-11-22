@@ -18,26 +18,31 @@
     </table>
     <br><br><br>
     {{ venues }}<br>
-    <!-- Has Next: {{ venues.has_next }}<br><br>
-    Cuurent page: {{ venues.number }}<br><br>
-        Has Next: {{ venues.has_next }}<br><br>
-            Number of Pages: {{ venues.paginator.num_pages }}<br><br><br><br>
- -->
 
-  {% if venues.has_previous %}          
-    <a href="?page=1">&laquo First</a>
-    <a href="?page={{ venues.previous_page_number }}">Previous</a>
-  {% endif %}
 
-Page {{ venues.number }} of {{ venues.paginator.num_pages }}
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+
+
+{% if venues.has_previous %}          
+    <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
+    <li class="page-item"><a class="page-link" href="?page={{ venues.previous_page_number }}">Previous</a></li>
+{% endif %}
+
+<!-- <li class="page-item disabled"><a href="#" class="page-link">Page {{ venues.number }} of {{ venues.paginator.num_pages }}</a></li> -->
+
+{% for i in nums %}
+  <li class="page-item"><a class="page-link" href="?page={{ forloop.counter }}">- {{ forloop.counter }}
+{% endfor %}  
 
 {% if venues.has_next %}
-    <a href="?page={{ venues.next_page_number }}"> Next</a>
-    <a href="?page={{ venues.paginator.num_pages }}"> Last &raquo</a> 
+    <li class="page-item"><a class="page-link" href="?page={{ venues.next_page_number }}"> Next</a></li>
+    <li class="page-item"><a class="page-link" href="?page={{ venues.paginator.num_pages }}"> Last &raquo</a></li> 
 {% endif %}      
 
-    <br><br><br>
-
+</ul>
+</nav>
+<br>
 
 
 
