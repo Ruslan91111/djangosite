@@ -4,7 +4,88 @@ from calendar import HTMLCalendar
 from datetime import datetime
 from .models import Event, Venue
 from .forms import VenueForm, EventForm
-from django.http import HttpResponseRedirect
+import csv
+from django.http import HttpResponseRedirect, HttpResponse, FileResponse
+import io
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
+from reportlab.lib.pagesizes import letter
+from django.core.paginator import Paginator
+
+
+
+
+
+
+# Generate a PDF File Venue List
+def venue_pdf(requset):
+    # Create Bytestream buffer
+    buf = io.BytesIO()
+    # Create a canvas
+    c = canvas.Canvas(buf, pagesize=letter, bottomup=0)
+
+    # Create a text object
+    textob = c.beginText()
+    textob.setTextOrigin(inch, inch)
+    textob.setFont("Helvetica", 14)
+
+    venues = Venue.objects.all()
+    lines = []
+    for venue in venues:
+        lines.append(venue.name)
+        lines.append(venue.address)
+        lines.append(venue.zip_code)
+        lines.append(venue.phone)
+        lines.append(venue.web)
+        lines.append(venue.email_address)
+        lines.append("=" * 20)
+
+    for line in lines:
+        textob.textLine(line)
+
+    #Finish Up
+    c.drawText(textob)
+    c.showPage()
+    c.save()
+    buf.seek(0)
+
+    return FileResponse(buf, as_attachment=True, filename='venue.pdf')
+
+
+
+
+
+
+# Generate Text File Venue List
+def venue_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=venues.csv'
+
+    # Create a csv writer
+    writer = csv.writer(response)
+
+    # Designate The Model
+    venues = Venue.objects.all()
+
+    # Add column headings to the csv file
+    writer.writerow(['Venue Name', 'Address', 'Zip Code', 'Phone', 'Web address', 'Email'])
+    for venue in venues:
+        writer.writerow([venue.name, venue.address, venue.zip_code, venue.phone, venue.web])
+    return response
+
+
+# Generate Text File Venue List
+def venue_text(request):
+    response = HttpResponse(content_type='text/plain')
+    response['Content-Disposition'] = 'attachment; filename=venues.txt'
+    venues = Venue.objects.all()
+
+    lines = []
+    for venue in venues:
+        lines.append(f'{venue.name}\n{venue.address}\n{venue.zip_code}\n{venue.phone}\n{venue.web}\n\n\n')
+    # Write to TextFile
+    response.writelines(lines)
+    return response
 
 
 def delete_event(request, event_id):
@@ -68,8 +149,15 @@ def show_venue(request, venue_id):
 
 
 def list_venues(request):
-    venue_list = Venue.objects.all().order_by('name')
-    return render(request, 'events/venue.html', {'venue_list': venue_list})
+    # venue_list = Venue.objects.all().order_by('name')
+    venue_list = Venue.objects.all()
+
+    # set up pagination
+    p = Paginator(Venue.objects.all(), 5)
+    page = request.GET.get('page')
+    venues = p.get_page(page)
+
+    return render(request, 'events/venue.html', {'venue_list': venue_list, 'venues': venues})
 
 
 def add_venue(request):
