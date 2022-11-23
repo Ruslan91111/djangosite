@@ -3,6 +3,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 
+from .forms import RegisterUserForm
+
 
 def register_user(request):
     if request.method == "POST":
@@ -16,7 +18,7 @@ def register_user(request):
             messages.success(request, "Registraion success")
             return redirect('home')
     else:
-        form = UserCreationForm()
+        form = RegisterUserForm()
 
     return render(request, 'authenticate/register_user.html', {'form': form})
 
