@@ -20,7 +20,8 @@
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="{% url 'list-events' %}">All events</a></li>
             {% if user.is_authenticated %}
-            <li><a class="dropdown-item" href="{% url 'add-event' %}">Add event</a></li>
+              <li><a class="dropdown-item" href="{% url 'add-event' %}">Add event</a></li>
+              <li><a class="dropdown-item" href="{% url 'my-events' %}">My events</a></li>
             {% endif %}
           </ul>
 
