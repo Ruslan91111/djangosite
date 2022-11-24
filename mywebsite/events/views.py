@@ -11,6 +11,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch
 from reportlab.lib.pagesizes import letter
 from django.core.paginator import Paginator
+from django.contrib import messages
 
 
 
@@ -82,8 +83,13 @@ def venue_text(request):
 
 def delete_event(request, event_id):
     event = Event.objects.get(pk=event_id)
-    event.delete()
-    return redirect('list-events')
+    if request.user == event.manager:
+        event.delete()
+        messages.success(request, "Event deleted.")
+        return redirect('list-events')
+    else:
+        messages.success(request, "You are not authorized to delete this event.")
+        return redirect('list-events')
 
 
 def delete_venue(request, venue_id):
