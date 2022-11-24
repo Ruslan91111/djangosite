@@ -1,5 +1,5 @@
 {% extends 'events/base.html' %}
-
+{% if user.is_authenticated %}
 {% block content %}
    <h1>Update Venue...</h1>
    <br>
@@ -8,5 +8,8 @@
      {{ form.as_p }}
      <br>
      <input type="submit" value="Update" class="btn btn-secondary">
-
+{% else %}
+        <h1> Sorry! You must be logged in to view this page...</h1>
+    <a href="{% url 'login' %}">Login here.</a>
+    {% endif %}
 {% endblock %}

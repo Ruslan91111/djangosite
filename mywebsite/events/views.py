@@ -14,9 +14,6 @@ from django.core.paginator import Paginator
 
 
 
-
-
-
 # Generate a PDF File Venue List
 def venue_pdf(requset):
     # Create Bytestream buffer
@@ -52,10 +49,6 @@ def venue_pdf(requset):
     return FileResponse(buf, as_attachment=True, filename='venue.pdf')
 
 
-
-
-
-
 # Generate Text File Venue List
 def venue_csv(request):
     response = HttpResponse(content_type='text/csv')
@@ -79,7 +72,6 @@ def venue_text(request):
     response = HttpResponse(content_type='text/plain')
     response['Content-Disposition'] = 'attachment; filename=venues.txt'
     venues = Venue.objects.all()
-
     lines = []
     for venue in venues:
         lines.append(f'{venue.name}\n{venue.address}\n{venue.zip_code}\n{venue.phone}\n{venue.web}\n\n\n')
@@ -153,7 +145,7 @@ def list_venues(request):
     venue_list = Venue.objects.all()
 
     # set up pagination
-    p = Paginator(Venue.objects.all(), 2)
+    p = Paginator(Venue.objects.all(), 5)
     page = request.GET.get('page')
     venues = p.get_page(page)
     nums = "a" * venues.paginator.num_pages
@@ -175,10 +167,14 @@ def add_venue(request):
     return render(request, 'events/add_venue.html', {"form": form, 'submitted': submitted})
 
 
-
 def all_events(request):
     event_list = Event.objects.all().order_by('event_date', 'name')
-    return render(request, 'events/event_list.html', {'event_list': event_list})
+    p = Paginator(Event.objects.all(), 5)
+    page = request.GET.get('page')
+    events = p.get_page(page)
+    nums = "a" * events.paginator.num_pages
+
+    return render(request, 'events/event_list.html', {'event_list': event_list, 'events': events, 'nums': nums})
 
 
 def home(request, year=datetime.now().year, month=datetime.now().strftime('%B')):

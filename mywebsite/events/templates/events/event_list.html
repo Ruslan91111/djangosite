@@ -5,7 +5,7 @@
   <h1>Events</h1>
   
 
-  {% for event in event_list %}
+  {% for event in events %}
 
     <div class="card">
       <div class="card-header">
@@ -26,27 +26,48 @@
             {{ user }}<br/>
           {% endfor %} 
         </p>
+
+
+
+     {% if user.is_authenticated %}
+        {% if user == event.manager %}
+          <div class="card-footer text-muted">
+          <a href="{% url 'update-event' event.id %}" class="btn btn-outline-secondary btn-sm"> Update Event</a>  <a href="{% url 'delete-event' event.id %}" class="btn btn-outline-danger btn-sm"> Delete Event</a>
+          </div>
+       {% endif %}
+      {% endif %}   
+    {% endfor %}
+
+ <!--PAGINATION-->
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+
+
+{% if events.has_previous %}          
+    <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
+    <li class="page-item"><a class="page-link" href="?page={{ events.previous_page_number }}">Previous</a></li>
+{% endif %}
+
+<li class="page-item disabled"><a href="#" class="page-link">Page {{ events.number }} of {{ events.paginator.num_pages }}</a></li>
+
+{% for i in nums %}
+  <li class="page-item"><a class="page-link" href="?page={{ forloop.counter}}"> {{ forloop.counter }}
+{% endfor %}  
+
+{% if events.has_next %}
+    <li class="page-item"><a class="page-link" href="?page={{ events.next_page_number }}"> Next</a></li>
+    <li class="page-item"><a class="page-link" href="?page={{ events.paginator.num_pages }}"> Last &raquo</a></li> 
+{% endif %}      
+
+</ul>
+
+
+
+
+     
  
-        <div class="card-footer text-muted">
-          <a href="{% url 'update-event' event.id %}" class="btn btn-outline-secondary btn-sm"> Update </a> 
-          <a href="{% url 'delete-event' event.id %}" class="btn btn-outline-danger btn-sm"> Delete </a>
-        </div>
- 
 
-
-
-      </div>
     </div>
-
-
-
-
-
-
-
-  {% endfor %}      
-
-
 
 
 {% endblock %}

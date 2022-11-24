@@ -9,10 +9,14 @@
       {% for venue in venues %}  
           <tr>
               <td><a href="{% url 'show-venue' venue.id %}"> {{ venue }} </a></td>
+                     {% if user.is_authenticated %}
+
               <td align="right"><a href="{% url 'update-venue' venue.id %}" class="btn btn-outline-secondary btn-sm"> Update </a>
                 <a href="{% url 'delete-venue' venue.id %}" class="btn btn-outline-secondary btn-sm"> Delete </a>
               </td>
           </tr>
+            {% endif %}        
+
       {% endfor %}
     </table>
 
@@ -27,6 +31,9 @@
      Has Next: {{ venues.has_next }}<br><br>
      Number of Pages: {{ venues.paginator.num_pages }}<br><br><br><br>u
  -->
+
+
+
 
 <nav aria-label="Page navigation example">
   <ul class="pagination justify-content-center">
