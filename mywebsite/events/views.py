@@ -182,7 +182,6 @@ def search_events(request):
         return render(request, 'events/search_events.html', {})
 
 
-
 def show_venue(request, venue_id):
     venue = Venue.objects.get(pk=venue_id)
     venue_owner = User.objects.get(pk=venue.owner)
@@ -205,7 +204,7 @@ def list_venues(request):
 def add_venue(request):
     submitted = False
     if request.method == "POST":
-        form = VenueForm(request.POST)
+        form = VenueForm(request.POST, request.FILES)
         if form.is_valid():
             venue = form.save(commit=False)
             venue.owner = request.user.id   #logged in user
@@ -241,6 +240,13 @@ def home(request, year=datetime.now().year, month=datetime.now().strftime('%B'))
     # get current year
     now = datetime.now()
     current_year = now.year
+
+    # Query the events model for dates
+    event_list = Event.objects.filter(
+        event_date__year=datetime.now().year,
+        event_date__month=month_number,
+    )
+
     # get current time
     time = now.strftime('%H:%M')
 
@@ -249,6 +255,7 @@ def home(request, year=datetime.now().year, month=datetime.now().strftime('%B'))
                    "month": month, "month_number": month_number,
                    "cal": cal,
                    "current_year": current_year,
-                   "time": time})
+                   "time": time,
+                   "event_list": event_list})
 
 
