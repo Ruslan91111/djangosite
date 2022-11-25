@@ -1,11 +1,32 @@
 {% extends 'events/base.html' %}
 
-
 {% block content %}
-  <h1>Events</h1>
-  
 
-  {% for event in events %}
+<div class="card">
+  <div class="card-header">
+    {% if searched %}
+     <h1>You search for {{ searched }}</h1>  
+    {% else %}
+      Search Events...
+    {% endif %}   
+
+
+  </div>
+<div class="card-body">
+  <form method=POST action="{% url 'search-events' %}">
+      {% csrf_token %}
+      <input class="form-control me-2" type="search" placeholder="Search Events" aria-label="Search" name="searched">
+      <button class="btn btn-outline-success" type="submit">Search</button>
+  </form>
+</div>
+</div>  
+
+
+
+    
+        <br>
+        {% for event in events %}
+            {% for event in events %}
 
     <div class="card">
       <div class="card-header">
@@ -71,6 +92,6 @@
  
 
     </div>
-
+        {% endfor %}  
 
 {% endblock %}

@@ -22,6 +22,7 @@
             {% if user.is_authenticated %}
               <li><a class="dropdown-item" href="{% url 'add-event' %}">Add event</a></li>
               <li><a class="dropdown-item" href="{% url 'my-events' %}">My events</a></li>
+              <li><a class="dropdown-item" href="{% url 'search-events' %}">Search Events</a></li>
             {% endif %}
           </ul>
 
