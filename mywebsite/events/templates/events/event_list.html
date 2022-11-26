@@ -14,14 +14,16 @@
       <div class="card-body">
         <h5 class="card-title">Venue: {{event.venue }}</h5>
         <p class="card-text">
+          <ul>
 
-        <strong>Date: </strong> {{event.event_date }}<br/>
-        <strong>Venue: </strong> {{event.venue }}<br/>
-        <strong>Venue Website: </strong>{{event.venue.web }}<br/>
-        <strong>Manager: </strong>{{event.manager }}<br/>
-        <strong>Description: </strong> {{event.description }} <br/>
-          
-          <strong>Attendees: </strong> 
+              <li><strong>Date: </strong> {{ event.event_date }}<br/></li>
+              <li><strong>Days Till Event: {{ event.Days_till }}</strong></li>
+              <li><strong>Occurred: {{ event.is_past }}</strong></li>
+              <li><strong>Venue: </strong> {{event.venue }}<br/></li>
+              <li><strong>Venue Website: </strong>{{event.venue.web }}<br/></li>
+              <li><strong>Manager: </strong>{{event.manager }}<br/></li>
+              <li><strong>Description: </strong> {{event.description }} <br/></li>
+              <li><strong>Attendees: </strong> 
           {% for user in event.attendees.all %}
             {{ user }}<br/>
           {% endfor %} 

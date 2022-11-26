@@ -219,8 +219,8 @@ def add_venue(request):
 
 
 def all_events(request):
-    event_list = Event.objects.all().order_by('event_date', 'name')
-    p = Paginator(Event.objects.all(), 5)
+    event_list = Event.objects.all().order_by('-event_date')
+    p = Paginator(Event.objects.all(), 3)
     page = request.GET.get('page')
     events = p.get_page(page)
     nums = "a" * events.paginator.num_pages
