@@ -15,6 +15,30 @@ from django.core.paginator import Paginator
 from django.contrib import messages
 
 
+def admin_approval(request):
+    event_list = Event.objects.all().order_by('-event_date')
+    if request.user.is_superuser:
+        if request.method == "POST":
+            id_list = request.POST.getlist('boxes')
+
+            # Uncheck all events
+            event_list.update(approved=False)
+            # Update the database
+            for x in id_list:
+                Event.objects.filter(pk=int(x)).update(approved=True)
+            messages.success(request, "Event list approval has been uppdated")
+            return redirect('list-events')
+
+        return render(request, 'events/admin_approval.html', {"event_list": event_list})
+    else:
+        messages.success(request, "You aren't authorized to view this page!")
+        return redirect('home')
+
+
+
+
+
+
 # Create My Events Page
 def my_events(request):
     if request.user.is_authenticated:
@@ -189,15 +213,11 @@ def show_venue(request, venue_id):
 
 
 def list_venues(request):
-    # venue_list = Venue.objects.all().order_by('name')
     venue_list = Venue.objects.all()
-
-    # set up pagination
     p = Paginator(Venue.objects.all(), 5)
     page = request.GET.get('page')
     venues = p.get_page(page)
     nums = "a" * venues.paginator.num_pages
-
     return render(request, 'events/venue.html', {'venue_list': venue_list, 'venues': venues, 'nums': nums})
 
 
@@ -224,7 +244,6 @@ def all_events(request):
     page = request.GET.get('page')
     events = p.get_page(page)
     nums = "a" * events.paginator.num_pages
-
     return render(request, 'events/event_list.html', {'event_list': event_list, 'events': events, 'nums': nums})
 
 

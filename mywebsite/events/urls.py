@@ -19,6 +19,7 @@ urlpatterns = [
     path('venue_csv', views.venue_csv, name='venue_csv'),
     path('venue_pdf', views.venue_pdf, name='venue_pdf'),
     path('my_events', views.my_events, name='my-events'),
-
+    path('search_events', views.search_events, name='search-events'),
+    path('admin_approval', views.admin_approval, name='admin_approval'),
 
 ]
