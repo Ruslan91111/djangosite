@@ -17,9 +17,35 @@
 
   </div>
 </div>
+<br><br>
+
+
+<br><br>
+<h1>Event Approval Form</h1>
+<br>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Venue Name</th>
+      <th scope="col">Events</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for venue in venue_list %}
+    <tr>
+      <td>
+      <a href="{% url 'show-venue' venue.id %}">{{ venue }}</td></a>
+      <td>
+      <a href="{% url 'venue-events' venue.id %}" class="btn btn-sm btn-secondary">List Events</td></a>
+      </td>
+    {% endfor %}  
+    </tr>
+  </tbody>
+</table>
 
 
 
+<!-- APPROVAL EVENTS -->
 <br><br>
 <h1>Event Approval Form</h1>
 <br>
@@ -56,6 +82,6 @@
 </table>
 <br>
 <button class="btn btn-secondary" type="submit">Update approval</button>
-
+<!-- END APPROVAL EVENTS -->
 
 {% endblock %}
